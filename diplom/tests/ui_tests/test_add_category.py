@@ -130,7 +130,7 @@ def test_filemanager_opening(browser, authenticate):
 @allure.epic('UI тесты')
 @allure.story('Добавление категории товаров')
 @allure.title('Проверка загрузки изображения')
-def test_upload_image(browser, authenticate, test_data, db_transaction):
+def test_upload_image(browser, authenticate, test_data, db_session):
     AdminAccount(browser).click_catalog()
     AdminAccount(browser).click_categories()
     Categories(browser).add_new()
@@ -142,7 +142,7 @@ def test_upload_image(browser, authenticate, test_data, db_transaction):
 @allure.epic('UI тесты')
 @allure.story('Добавление категории товаров')
 @allure.title('Проверка выбора загруженного изображения')
-def test_image_select(browser, authenticate, test_data, db_transaction):
+def test_image_select(browser, authenticate, test_data, db_session):
     AdminAccount(browser).click_catalog()
     AdminAccount(browser).click_categories()
     Categories(browser).add_new()
@@ -178,7 +178,7 @@ def test_seo_url_input(browser, authenticate, test_data):
 @allure.epic('UI тесты')
 @allure.story('Добавление категории товаров')
 @allure.title('Проверка создания новой категории')
-def test_category_creation(browser, authenticate, test_data, db_transaction):
+def test_category_creation(browser, authenticate, test_data, db_session):
     AdminAccount(browser).click_catalog()
     AdminAccount(browser).click_categories()
     Categories(browser).add_new()
