@@ -1,0 +1,84 @@
+import pytest
+import json
+import requests
+import allure
+
+from pydantic import ValidationError
+from sqlalchemy import text
+from diplom.models.add_customer_response_model import AddCustomerResponse
+
+
+@allure.epic('API тесты')
+@allure.story('Добавление покупателя')
+@allure.title('Проверка статуса')
+def test_add_customer_status(logger, db_session, base_url, get_api_token, test_data, delete_session):
+    target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
+
+    payload = {'customer_group_id': test_data.user_data['customer_group_id'],
+               'firstname': test_data.user_data['firstname'],
+               'lastname': test_data.user_data['lastname'],
+               'email': test_data.user_data['email']}
+
+    headers = {
+        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
+    }
+
+    logger.info("Sending request")
+    response = requests.request("POST", target_url, headers=headers, data=payload, verify=False)
+    assert response.status_code == 200
+
+
+@allure.epic('API тесты')
+@allure.story('Добавление покупателя')
+@allure.title('Валидация ответа')
+def test_add_customer_validate(logger, db_session, base_url, get_api_token, test_data, delete_session):
+    target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
+
+    payload = {'customer_group_id': test_data.user_data['customer_group_id'],
+               'firstname': test_data.user_data['firstname'],
+               'lastname': test_data.user_data['lastname'],
+               'email': test_data.user_data['email']}
+
+    headers = {
+        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
+    }
+
+    logger.info("Sending request")
+    response = requests.request("POST", target_url, headers=headers, data=payload, verify=False).json()
+
+    logger.info("Validating response")
+    try:
+        validated_data = AddCustomerResponse(**response)
+        assert isinstance(validated_data, AddCustomerResponse), "Ответ не валиден по схеме AddVoucherResponse"
+    except ValidationError as e:
+        pytest.fail(f"Ошибка валидации {e.json()}")
+
+
+@allure.epic('API тесты')
+@allure.story('Добавление покупателя')
+@allure.title('Проверка сохраненных данных')
+def test_add_customer_data(logger, db_session, base_url, get_api_token, test_data, delete_session):
+    target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
+
+    payload = {'customer_group_id': test_data.user_data['customer_group_id'],
+               'firstname': test_data.user_data['firstname'],
+               'lastname': test_data.user_data['lastname'],
+               'email': test_data.user_data['email']}
+
+    headers = {
+        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
+    }
+
+    logger.info("Sending request")
+    requests.request("POST", target_url, headers=headers, data=payload, verify=False)
+
+    logger.info(f"Getting session {get_api_token} data from DB")
+    session_data_raw = db_session.execute(text("SELECT data FROM oc_session WHERE session_id = :session_id"),
+                                          {"session_id": get_api_token}).scalar()
+    session_data = json.loads(session_data_raw)
+    print(session_data)
+
+    assert ((session_data['customer']['customer_group_id'] == test_data.user_data['customer_group_id']) and
+            (session_data['customer']['firstname'] == test_data.user_data['firstname']) and
+            (session_data['customer']['lastname'] == test_data.user_data['lastname']) and
+            (session_data['customer']['email'] == test_data.user_data['email']))
