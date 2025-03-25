@@ -1,4 +1,4 @@
-import os
+import os.path
 
 from faker import Faker
 from random import randint
@@ -17,10 +17,7 @@ class _TestData:
 
     @property
     def get_filepath(self):
-        if os.getcwd() == r"C:\Users\m.zhigunov\PycharmProjects\Diplom\diplom":
-            return os.path.join(os.getcwd(), "src", "1.jpg")
-        else:
-            return r"C:\Users\m.zhigunov\PycharmProjects\Diplom\diplom\src\1.jpg"
+        return os.path.join(os.path.dirname(__file__), '1.jpg')
 
     @property
     def category_data(self):

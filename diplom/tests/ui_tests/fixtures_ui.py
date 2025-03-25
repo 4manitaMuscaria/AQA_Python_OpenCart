@@ -62,6 +62,20 @@ def delete_address(logger, db_session, test_data):
 
 
 @pytest.fixture()
+def delete_category(logger, db_session, test_data):
+
+    yield
+
+    logger.info(f"Deleting category {test_data.category_data["category_name"]} from database...")
+    db_session.execute(text(
+        "DELETE c, cd FROM oc_category c JOIN oc_category_description cd ON c.category_id = cd.category_id WHERE "
+        "cd.name = :name"), {"name": test_data.category_data["category_name"]})
+    db_session.execute(text("DELETE s FROM oc_seo_url s WHERE s.keyword LIKE :keyword"),
+                       {"keyword": f"%{test_data.category_data["seo_url"]}"})
+    db_session.commit()
+
+
+@pytest.fixture()
 def delete_file(logger, db_session, test_data):
 
     yield

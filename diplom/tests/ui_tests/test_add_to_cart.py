@@ -3,7 +3,7 @@ import allure
 from diplom.pages.main_page import MainPage
 from diplom.pages.desktops_page import Desktops
 from diplom.pages.product_card_page import ProductCard
-from diplom.pages.alert_element import AlertSuccessElement
+from diplom.elements.alert_element import AlertSuccessElement
 
 
 @allure.epic('UI тесты')
