@@ -29,7 +29,7 @@ def logger(request):
 
     # Создаем папку и файл с логами
     test_name = request.session.items[0].name
-    print(f"DEBUG: test_name before cleaning: {test_name}")
+    # print(f"DEBUG: test_name before cleaning: {test_name}")
     log_directory = "logs"
     if not os.path.exists(log_directory):
         os.makedirs(log_directory)
@@ -68,7 +68,7 @@ def db_session(logger):
     Фикстура для работы с базой данных в рамках транзакции.
     """
     engine = create_engine(f"mysql+pymysql://{Credetntials.DB_CREDS['user']}:{Credetntials.DB_CREDS['password']}@"
-                           f"{Credetntials.DB_CREDS['host']}:{Credetntials.DB_CREDS['port']}/"
+                           f"{Credetntials.HOST}:{Credetntials.DB_CREDS['port']}/"
                            f"{Credetntials.DB_CREDS['db_name']}")
     logger.info("Connecting DB and opening session")
     connection = engine.connect()

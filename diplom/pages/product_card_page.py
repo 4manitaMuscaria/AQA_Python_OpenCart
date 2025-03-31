@@ -1,6 +1,5 @@
 import time
 import allure
-import pyautogui
 
 from selenium.common.exceptions import TimeoutException
 from diplom.pages.base_page import BasePage
@@ -61,7 +60,6 @@ class ProductCard(BasePage, ProductCardLocators):
     def input_textarea(self, text):
         textarea_element = self.get_element(self.textarea)
         self.browser.execute_script("arguments[0].scrollIntoView()", textarea_element)
-        time.sleep(0.5)
         self.input_value(self.textarea, text)
         textarea_val = self.get_element(self.textarea)
         return textarea_val.get_attribute("value")
@@ -70,8 +68,12 @@ class ProductCard(BasePage, ProductCardLocators):
     def upload_new_file(self, filepath):
         self.click(self.upload_file_button)
         if not self.browser.is_headless:
-            time.sleep(1)
-            pyautogui.press('esc')
+            try:
+                import pyautogui
+                time.sleep(1)
+                pyautogui.press('esc')
+            except Exception:
+                print('Эта шляпа не работает при запуске теста из контейнера Docker')
         self.input_value(self.upload_file_input, filepath)
         return self.waiting_for_alert()
 

@@ -12,8 +12,7 @@ def get_api_token(logger, base_url):
     target_url = f"{base_url}?route=api/account/login"
     payload = f'username={Credetntials.API_CREDS["username"]}&key={Credetntials.API_CREDS["key"]}'
     headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
+        'Content-Type': 'application/x-www-form-urlencoded'
     }
 
     response = requests.request("POST", target_url, headers=headers, data=payload, verify=False)

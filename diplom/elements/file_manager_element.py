@@ -1,6 +1,5 @@
 import time
 import allure
-import pyautogui
 
 
 from diplom.pages.base_page import BasePage
@@ -22,8 +21,12 @@ class FileManager(BasePage, FileManagerLocators):
     def upload_file(self, filepath):
         self.click(self.upload_button)
         if not self.browser.is_headless:
-            time.sleep(1)
-            pyautogui.press('esc')
+            try:
+                import pyautogui
+                time.sleep(1)
+                pyautogui.press('esc')
+            except Exception:
+                print('Эта шляпа не работает при запуске теста из контейнера Docker')
         self.input_value(self.upload_input, filepath)
         return self.waiting_for_alert()
 

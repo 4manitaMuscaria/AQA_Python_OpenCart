@@ -22,9 +22,7 @@ def test_add_voucher_status(logger, db_session, base_url, get_api_token, test_da
                'message': test_data.voucher_data['message'],
                'amount': test_data.voucher_data['amount']}
 
-    headers = {
-        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
-    }
+    headers = {}
 
     logger.info("Sending request")
     response = requests.request("POST", target_url, headers=headers, data=payload, verify=False)
@@ -45,9 +43,7 @@ def test_add_voucher_validate(logger, db_session, base_url, get_api_token, test_
                'message': test_data.voucher_data['message'],
                'amount': test_data.voucher_data['amount']}
 
-    headers = {
-        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
-    }
+    headers = {}
 
     logger.info("Sending request")
     response = requests.request("POST", target_url, headers=headers, data=payload, verify=False).json()
@@ -74,9 +70,7 @@ def test_add_voucher_data(logger, db_session, base_url, get_api_token, test_data
                'message': test_data.voucher_data['message'],
                'amount': test_data.voucher_data['amount']}
 
-    headers = {
-        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
-    }
+    headers = {}
 
     logger.info("Sending request")
     requests.request("POST", target_url, headers=headers, data=payload, verify=False)

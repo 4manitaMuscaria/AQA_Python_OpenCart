@@ -19,9 +19,7 @@ def test_add_customer_status(logger, db_session, base_url, get_api_token, test_d
                'lastname': test_data.user_data['lastname'],
                'email': test_data.user_data['email']}
 
-    headers = {
-        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
-    }
+    headers = {}
 
     logger.info("Sending request")
     response = requests.request("POST", target_url, headers=headers, data=payload, verify=False)
@@ -39,9 +37,7 @@ def test_add_customer_validate(logger, db_session, base_url, get_api_token, test
                'lastname': test_data.user_data['lastname'],
                'email': test_data.user_data['email']}
 
-    headers = {
-        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
-    }
+    headers = {}
 
     logger.info("Sending request")
     response = requests.request("POST", target_url, headers=headers, data=payload, verify=False).json()
@@ -65,9 +61,7 @@ def test_add_customer_data(logger, db_session, base_url, get_api_token, test_dat
                'lastname': test_data.user_data['lastname'],
                'email': test_data.user_data['email']}
 
-    headers = {
-        'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
-    }
+    headers = {}
 
     logger.info("Sending request")
     requests.request("POST", target_url, headers=headers, data=payload, verify=False)

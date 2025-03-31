@@ -15,9 +15,7 @@ def test_checkout_cart_status(logger, db_session, base_url, get_api_token, add_v
     target_url = f"{base_url}?route=api/sale/cart&api_token={get_api_token}"
 
     payload = {}
-    headers = {
-      'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
-    }
+    headers = {}
 
     logger.info("Sending request")
     response = requests.request("GET", target_url, headers=headers, data=payload, verify=False)
@@ -31,9 +29,7 @@ def test_checkout_cart_validate(logger, db_session, base_url, get_api_token, add
     target_url = f"{base_url}?route=api/sale/cart&api_token={get_api_token}"
 
     payload = {}
-    headers = {
-      'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
-    }
+    headers = {}
 
     logger.info("Sending request")
     response = requests.request("GET", target_url, headers=headers, data=payload, verify=False).json()
@@ -53,9 +49,7 @@ def test_checkout_cart_data(logger, db_session, base_url, get_api_token, add_vou
     target_url = f"{base_url}?route=api/sale/cart&api_token={get_api_token}"
 
     payload = {}
-    headers = {
-      'Cookie': 'OCSESSID=a10f1082cb2db0e5b4aab9f8ab; currency=USD'
-    }
+    headers = {}
 
     logger.info("Sending request")
     response = requests.request("GET", target_url, headers=headers, data=payload, verify=False).json()

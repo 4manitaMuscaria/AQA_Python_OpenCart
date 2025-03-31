@@ -1,5 +1,5 @@
-from typing import List, Optional
-from pydantic import BaseModel, validator
+from typing import List
+from pydantic import BaseModel, field_validator
 
 
 class Voucher(BaseModel):
@@ -7,7 +7,7 @@ class Voucher(BaseModel):
     description: str
     amount: str
 
-    @validator('amount')
+    @field_validator('amount')
     def validate_amount(cls, value):
         if not value.startswith('$') or not value[1:].replace('.', '', 1).isdigit():
             raise ValueError("Invalid amount format")
