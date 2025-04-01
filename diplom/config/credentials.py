@@ -1,5 +1,5 @@
 class Credetntials():
-    HOST = "192.168.2.33"
+    HOST = "192.168.3.158"
     ADMIN_LOGIN = {
         "username": "user",
         "password": "bitnami"
