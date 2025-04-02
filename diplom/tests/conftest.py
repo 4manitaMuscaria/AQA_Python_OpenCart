@@ -65,7 +65,7 @@ def pytest_runtest_makereport(item, call):
 @pytest.fixture(scope="function")
 def db_session(logger):
     """
-    Фикстура для работы с базой данных в рамках транзакции.
+    Фикстура для работы с базой данных
     """
     engine = create_engine(f"mysql+pymysql://{Credetntials.DB_CREDS['user']}:{Credetntials.DB_CREDS['password']}@"
                            f"{Credetntials.HOST}:{Credetntials.DB_CREDS['port']}/"
@@ -83,3 +83,4 @@ def db_session(logger):
         # transaction.rollback()
         connection.close()
         session.close()
+        logger.info("Session closed")

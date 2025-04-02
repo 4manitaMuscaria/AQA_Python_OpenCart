@@ -18,7 +18,6 @@ def base_url(request):
 
 @pytest.fixture()
 def api_setup(logger, db_session):
-
     api_ip = db_session.execute(text("SELECT * FROM oc_api_ip WHERE ip = :ip"),
                                 {"ip": "172.18.0.1"}).fetchone()
     logger.info(f"найден ip {api_ip}")
@@ -30,8 +29,9 @@ def api_setup(logger, db_session):
                             "ip": "172.18.0.1"})
         db_session.commit()
 
-    key = db_session.execute(text("SELECT `key` FROM oc_api WHERE username = :username"),
-                             {"username": Credetntials.API_CREDS["username"]}).scalar()
-    logger.info(f"получили ключ {key}")
+    api_key = db_session.execute(text("SELECT `key` FROM oc_api WHERE username = :username"),
+                                 {"username": Credetntials.API_CREDS["username"]}).scalar()
+    logger.info("фикстура api_setup закончила работу")
+    return api_key
 
-    yield key
+

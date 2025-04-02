@@ -29,7 +29,7 @@ def test_add_customer_status(logger, db_session, base_url, get_api_token, test_d
 @allure.epic('API тесты')
 @allure.story('Добавление покупателя')
 @allure.title('Валидация ответа')
-def test_add_customer_validate(logger, db_session, base_url, get_api_token, test_data, delete_session):
+def test_add_customer_validate(logger, db_session, base_url, delete_session, get_api_token, test_data):
     target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
 
     payload = {'customer_group_id': test_data.user_data['customer_group_id'],
@@ -53,7 +53,7 @@ def test_add_customer_validate(logger, db_session, base_url, get_api_token, test
 @allure.epic('API тесты')
 @allure.story('Добавление покупателя')
 @allure.title('Проверка сохраненных данных')
-def test_add_customer_data(logger, db_session, base_url, get_api_token, test_data, delete_session):
+def test_add_customer_data(logger, db_session, base_url, delete_session, get_api_token, test_data):
     target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
 
     payload = {'customer_group_id': test_data.user_data['customer_group_id'],
@@ -63,14 +63,15 @@ def test_add_customer_data(logger, db_session, base_url, get_api_token, test_dat
 
     headers = {}
 
-    logger.info("Sending request")
-    requests.request("POST", target_url, headers=headers, data=payload, verify=False)
+    logger.info(f"Sending request {get_api_token}")
+    response = requests.request("POST", target_url, headers=headers, data=payload, verify=False)
+    logger.info(f"response from server: \n {response.json()}")
 
     logger.info(f"Getting session {get_api_token} data from DB")
     session_data_raw = db_session.execute(text("SELECT data FROM oc_session WHERE session_id = :session_id"),
                                           {"session_id": get_api_token}).scalar()
+    logger.info(f"From session {get_api_token} have got data {session_data_raw}")
     session_data = json.loads(session_data_raw)
-    print(session_data)
 
     assert ((session_data['customer']['customer_group_id'] == test_data.user_data['customer_group_id']) and
             (session_data['customer']['firstname'] == test_data.user_data['firstname']) and

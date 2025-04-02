@@ -11,7 +11,7 @@ def get_api_token(logger, base_url, api_setup):
 
     target_url = f"{base_url}?route=api/account/login"
     logger.info(f"из фикстуры получен ключ {api_setup}")
-    payload = f'username={Credetntials.API_CREDS["username"]}&key={Credetntials.API_CREDS["key"]}'
+    payload = f'username={Credetntials.API_CREDS["username"]}&key={api_setup}'
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
@@ -19,7 +19,7 @@ def get_api_token(logger, base_url, api_setup):
     response = requests.request("POST", target_url, headers=headers, data=payload, verify=False)
     logger.info(payload, response.json())
 
-    yield response.json()['api_token']
+    return response.json()['api_token']
 
 
 @pytest.fixture()

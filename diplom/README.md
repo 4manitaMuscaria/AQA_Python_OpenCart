@@ -77,7 +77,11 @@ poetry install
 
 4. Запуск тестов  
 #### Локальный запуск  
-Для запуска тестов локально выполните:
+Для запуска тестов локально выполните скрипт для разворачивания OpenCart:
+```bash
+python utils/docker_setup.py
+```
+А затем запускайте тесты командой:
 ```bash
 poetry run pytest tests/ --execution=local
 ```

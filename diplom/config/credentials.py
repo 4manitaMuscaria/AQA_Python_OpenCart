@@ -1,6 +1,5 @@
 from diplom.utils.docker_setup import get_local_ip
 
-
 class Credetntials():
     HOST = get_local_ip()
     ADMIN_LOGIN = {
