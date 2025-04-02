@@ -6,7 +6,6 @@ from sqlalchemy.orm import sessionmaker
 from diplom.utils.logger import LoggerManager
 from diplom.config.credentials import Credetntials
 
-
 pytest_plugins = [
     "diplom.tests.ui_tests.conftest_ui",
     "diplom.tests.ui_tests.fixtures_ui",
@@ -69,7 +68,8 @@ def db_session(logger):
     """
     engine = create_engine(f"mysql+pymysql://{Credetntials.DB_CREDS['user']}:{Credetntials.DB_CREDS['password']}@"
                            f"{Credetntials.HOST}:{Credetntials.DB_CREDS['port']}/"
-                           f"{Credetntials.DB_CREDS['db_name']}")
+                           f"{Credetntials.DB_CREDS['db_name']}",
+                           isolation_level="READ COMMITTED")
     logger.info("Connecting DB and opening session")
     connection = engine.connect()
     # transaction = connection.begin()
