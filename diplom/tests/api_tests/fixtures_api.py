@@ -6,16 +6,18 @@ from diplom.config.credentials import Credetntials
 
 
 @pytest.fixture()
-def get_api_token(logger, base_url):
+def get_api_token(logger, base_url, api_setup):
     logger.info("Getting API-token")
 
     target_url = f"{base_url}?route=api/account/login"
+    logger.info(f"из фикстуры получен ключ {api_setup}")
     payload = f'username={Credetntials.API_CREDS["username"]}&key={Credetntials.API_CREDS["key"]}'
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
 
     response = requests.request("POST", target_url, headers=headers, data=payload, verify=False)
+    logger.info(payload, response.json())
 
     yield response.json()['api_token']
 

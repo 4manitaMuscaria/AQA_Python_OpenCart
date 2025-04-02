@@ -1,5 +1,8 @@
+from diplom.utils.docker_setup import get_local_ip
+
+
 class Credetntials():
-    HOST = "192.168.3.158"
+    HOST = get_local_ip()
     ADMIN_LOGIN = {
         "username": "user",
         "password": "bitnami"
@@ -13,5 +16,5 @@ class Credetntials():
     }
     API_CREDS = {
         "username": "Default",
-        "key": "5bb3c9d3d073f0899e38a781eb45fec111b36019768448f296242bb51bbf1b89cf28dbe14e9bfd7a3b1b9c7dea8cf68c282c5927c5c2248cbdfe305d240ba40e8f69f47c4747f54e6d649d5867e70dc420375f3494c8630ddfc46e39084f550b4ad6cd3336d5bf33ff2ff80092c11a4fe64dab6447e67c7f6bb66b2ebca4f52b"
+        "key": "946fbf10c9364946e5dffa67d5240ad13a8b69b3bed1c358acdf65e6685be67c81e40254fca9839638337eb77851c000a8d5154433b87a181d15407705eb583e2330c95c37b34df1dd8b8011353a363e53f2045b52bc0d2d00b78a6ab683f5cfc8397f91f8d4f2d0fc13c185f5a62a17cd12fdb8f0cd30a00c103adb88f742b5"
     }
