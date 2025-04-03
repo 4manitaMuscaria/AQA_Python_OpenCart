@@ -26,6 +26,7 @@ def api_setup(logger, db_session):
                            {"api_ip_id": 1,
                             "api_id": 1,
                             "ip": "172.18.0.1"})
+        db_session.commit()
         logger.info(f"Добавляем IP 172.18.0.1 в список, если он не найден")
 
     api_key = db_session.execute(text("SELECT `key` FROM oc_api WHERE username = :username"),

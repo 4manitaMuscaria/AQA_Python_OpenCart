@@ -2,6 +2,10 @@ FROM python:3.13
 LABEL authors="m.zhigunov"
 WORKDIR /diplom
 
+ARG HOST_IP
+
+ENV HOST_IP=$HOST_IP
+
 RUN apt-get update && apt-get install -y curl && \
     curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3 && \
     ln -s /opt/poetry/bin/poetry /usr/local/bin/poetry && \

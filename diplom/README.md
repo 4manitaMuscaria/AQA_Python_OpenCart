@@ -50,15 +50,14 @@ diplom/
 - pylint : Для статического анализа кода.
 
 ## Инструкция по сборке и запуску
-1. Развертывание OpenCart
-Используйте docker-compose для развертывания OpenCart:
+1. Развертывание OpenCart и сборка образа Docker с тестами  
+Используйте скрипт для развертывания OpenCart:
 ```bash
-docker-compose up -d
+python utils/docker_setup.py
 ```
-Примечание 1: Убедитесь, что порт 8080 свободен или измените его в docker-compose.yml.
-Примечание 2: Убедитесь, что IP, указанный в docker-compose.yml совпадает с IP, указанным в config/credentials.py
+Примечание 1: Убедитесь, что порты 8080 и 3306 свободны или измените их в docker-compose.yml.
 
-2. Запуск Selenoid
+2. Запуск Selenoid  
 Для запуска Selenoid выполните следующие команды:
 ```bash
 cm selenoid start --vnc
@@ -67,7 +66,7 @@ cm selenoid start --vnc
 ```bash
 cm selenoid-ui start
 ```
-Примечание: Убедитесь, что Docker и утилита **cm** установленs и работают на вашей системе, и команда выполняется из директории расположения **cm**. 
+Примечание: Убедитесь, что Docker и утилита **cm** установлены и работают на вашей системе, и команда выполняется из директории расположения **cm**. 
 
 3. Установка зависимостей
 Если вы хотите запустить тесты локально, установите зависимости с помощью Poetry:
@@ -77,11 +76,7 @@ poetry install
 
 4. Запуск тестов  
 #### Локальный запуск  
-Для запуска тестов локально выполните скрипт для разворачивания OpenCart:
-```bash
-python utils/docker_setup.py
-```
-А затем запускайте тесты командой:
+Локально запускайте тесты командой:
 ```bash
 poetry run pytest tests/ --execution=local
 ```
@@ -94,13 +89,17 @@ poetry run pytest tests/ui_tests/ --execution=local
 poetry run pytest tests/api_tests/ 
 ```
 #### Запуск из Docker
-Соберите образ с тестами:
-```bash
-docker build -t opencart-tests .
-```
-Запустите контейнер с тестами:
+
+Запустите контейнер с тестами командой:
 ```bash
 docker run --network selenoid opencart-tests tests/ --executor=selenoid --headless
+```
+Альтернативный вариант (с передачей текущего IP)
+```bash
+$$HOST_IP=$(python -c "import socket; s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.connect(('8.8.8.8', 80)); print(s.getsockname()[0])")
+```
+```bash
+docker run -e "HOST_IP=$HOST_IP" --network selenoid opencart-tests tests/ --executor=selenoid --headless
 ```
 Примечание: Использование --network selenoid необходимо для доступа к Selenoid. 
 

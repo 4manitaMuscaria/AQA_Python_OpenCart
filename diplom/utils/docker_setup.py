@@ -6,13 +6,39 @@ import socket
 # Функция для получения текущего IP в локальной сети
 def get_local_ip():
     try:
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-            s.connect(("8.8.8.8", 80))  # Google DNS
-            ip = s.getsockname()[0]
-        return ip
+        # Используем HOST_IP из переменных окружения (если есть)
+        if "HOST_IP" in os.environ:
+            return os.environ["HOST_IP"]
+        else:
+            with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+                s.connect(("8.8.8.8", 80))  # Google DNS
+                ip = s.getsockname()[0]
+            return ip
     except Exception as e:
         print(f"Ошибка при определении IP: {e}")
         exit(1)
+
+
+# Функция для сборки Docker образа
+def build_docker_image(ip):
+    try:
+
+        # Запускаем сборку образа с передачей аргумента
+        subprocess.run(
+            [
+                "docker", "build",
+                "-t", "opencart-tests",
+                "--build-arg", f"HOST_IP={ip}",
+                "."
+            ],
+            check=True
+        )
+        print("Docker-образ успешно собран.")
+
+    except subprocess.CalledProcessError as e:
+        print(f"Ошибка при сборке образа: {e}")
+        exit(1)
+
 
 
 # Функция для очистки Docker
@@ -74,6 +100,9 @@ def main():
     # Получаем IP
     ip = get_local_ip()
     print(f"Текущий IP в локальной сети: {ip}")
+
+    # Собираем образ Docker с передачей нового IP в переменные окружения
+    build_docker_image(ip)
 
     # Очищаем Docker
     for project_name in ("opencart", "mariadb"):
