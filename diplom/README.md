@@ -92,14 +92,14 @@ poetry run pytest tests/api_tests/
 
 Запустите контейнер с тестами командой:
 ```bash
-docker run --name test-run --network selenoid -v "$(pwd)/allure-result:/diplom/allure-result" -v "$(pwd)/logs:/diplom/logs" opencart-tests tests/api_tests/ --executor=selenoid --headless
+docker run --network selenoid -v "$(pwd)/allure-result:/diplom/allure-result" -v "$(pwd)/logs:/diplom/logs" opencart-tests tests/api_tests/ --executor=selenoid --headless
 ```
 Альтернативный вариант (с передачей текущего IP)
 ```bash
 $$HOST_IP=$(python -c "import socket; s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.connect(('8.8.8.8', 80)); print(s.getsockname()[0])")
 ```
 ```bash
-docker run -e "HOST_IP=$HOST_IP" --name test-run --network selenoid -v "$(pwd)/allure-report:/diplom/allure-result" -v "$(pwd)/logs:/diplom/logs" opencart-tests tests/ --executor=selenoid --headless
+docker run -e "HOST_IP=$HOST_IP" --network selenoid -v "$(pwd)/allure-report:/diplom/allure-result" -v "$(pwd)/logs:/diplom/logs" opencart-tests tests/ --executor=selenoid --headless
 ```
 Примечание: Использование --network selenoid необходимо для доступа к Selenoid. 
 
