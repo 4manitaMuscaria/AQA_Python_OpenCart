@@ -92,18 +92,29 @@ poetry run pytest tests/api_tests/
 
 Запустите контейнер с тестами командой:
 ```bash
-docker run --network selenoid opencart-tests tests/ --executor=selenoid --headless
+docker run --name test-run --network selenoid -v "$(pwd)/allure-result:/diplom/allure-result" -v "$(pwd)/logs:/diplom/logs" opencart-tests tests/api_tests/ --executor=selenoid --headless
 ```
 Альтернативный вариант (с передачей текущего IP)
 ```bash
 $$HOST_IP=$(python -c "import socket; s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.connect(('8.8.8.8', 80)); print(s.getsockname()[0])")
 ```
 ```bash
-docker run -e "HOST_IP=$HOST_IP" --network selenoid opencart-tests tests/ --executor=selenoid --headless
+docker run -e "HOST_IP=$HOST_IP" --name test-run --network selenoid -v "$(pwd)/allure-report:/diplom/allure-result" -v "$(pwd)/logs:/diplom/logs" opencart-tests tests/ --executor=selenoid --headless
 ```
 Примечание: Использование --network selenoid необходимо для доступа к Selenoid. 
 
-5. Логирование
+Для генерации отчета Allure выполните:
+```bash
+C:\Allure\bin\allure.bat generate ./allure-result -o ./allure-report --clean
+```
+где C:\Allure\bin\allure.bat путь до Allure, если он не установлен в системе  
+или 
+```bash
+allure generate ./allure-result -o ./allure-report --clean
+```
+если Allure установлен в окружении
+
+5. Логирование  
 Все логи тестов сохраняются в директорию logs/. Вы можете настроить формат и уровень логирования в utils/logger.py.
 
 ## Дополнительная информация
