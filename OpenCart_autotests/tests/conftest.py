@@ -3,6 +3,9 @@ import os
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy import MetaData
+from sqlalchemy.orm import relationship
 from OpenCart_autotests.utils.logger import LoggerManager
 from OpenCart_autotests.config.credentials import Credetntials
 
@@ -62,10 +65,11 @@ def pytest_runtest_makereport(item, call):
 
 
 @pytest.fixture(scope="function")
-def db_session(logger):
+def db_models_and_session(logger):
     """
     Фикстура для работы с базой данных
     """
+    logger.info("DB connection")
     engine = create_engine(f"mysql+pymysql://{Credetntials.DB_CREDS['user']}:{Credetntials.DB_CREDS['password']}@"
                            f"{Credetntials.HOST}:{Credetntials.DB_CREDS['port']}/"
                            f"{Credetntials.DB_CREDS['db_name']}",
@@ -74,13 +78,54 @@ def db_session(logger):
     connection = engine.connect()
     # transaction = connection.begin()
 
+    logger.info("Creating models")
+
+    # Создаем метаданные только для нужных таблиц
+    metadata = MetaData()
+    selected_tables = [
+        "oc_customer",
+        "oc_address",
+        "oc_category",
+        "oc_category_description",
+        "oc_seo_url",
+        "oc_api",
+        "oc_api_ip",
+        "oc_session",
+        "oc_upload"
+    ]
+
+    # Загружаем только указанные таблицы
+    metadata.reflect(engine, only=selected_tables)
+
+    # Генерируем модели только для этих таблиц
+    base = automap_base(metadata=metadata)
+    base.prepare()
+
+    # Собираем модели в словарь
+    models = {
+        table_name: getattr(base.classes, table_name)
+        for table_name in selected_tables
+    }
+
+    logger.info("Session opening")
+
     Session = sessionmaker(bind=connection)
     session = Session()
 
     try:
-        yield session
+        yield {"models": models, "session": session}
     finally:
         # transaction.rollback()
         connection.close()
         session.close()
         logger.info("Session closed")
+
+
+@pytest.fixture(scope="function")
+def db_session(db_models_and_session):
+    yield db_models_and_session["session"]
+
+
+@pytest.fixture(scope="function")
+def models(db_models_and_session):
+    yield db_models_and_session["models"]

@@ -6,7 +6,7 @@ from OpenCart_autotests.config.credentials import Credetntials
 
 
 @pytest.fixture()
-def get_api_token(logger, base_url, db_session, api_setup):
+def get_api_token(logger, base_url, api_setup):
     logger.info("Getting API-token")
 
     target_url = f"{base_url}?route=api/account/login"
@@ -23,13 +23,15 @@ def get_api_token(logger, base_url, db_session, api_setup):
 
 
 @pytest.fixture()
-def delete_session(logger, db_session, get_api_token):
+def delete_session(logger, models, db_session, get_api_token):
 
     yield
 
     logger.info(f"Deleting session {get_api_token} from database...")
-    db_session.execute(text("DELETE FROM oc_session WHERE session_id = :session_id"),
-                       {"session_id": get_api_token})
+    # db_models_and_session.execute(text("DELETE FROM oc_session WHERE session_id = :session_id"),
+    #                               {"session_id": get_api_token})
+    session = models["oc_session"]
+    db_session.query(session).filter(session.session_id == get_api_token).delete()
     db_session.commit()
 
 

@@ -1,6 +1,6 @@
 FROM python:3.13
 LABEL authors="m.zhigunov"
-WORKDIR /diplom
+WORKDIR /OpenCart_autotests
 
 ARG HOST_IP
 

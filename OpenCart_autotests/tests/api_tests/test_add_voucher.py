@@ -11,7 +11,7 @@ from OpenCart_autotests.models.add_voucher_response_model import AddVoucherRespo
 @allure.epic('API тесты')
 @allure.story('Добавление ваучера')
 @allure.title('Проверка статуса')
-def test_add_voucher_status(logger, db_session, base_url, get_api_token, test_data, delete_session):
+def test_add_voucher_status(logger, base_url, get_api_token, test_data, delete_session):
     target_url = f"{base_url}?route=api/sale/voucher.add&api_token={get_api_token}"
 
     payload = {'from_name': test_data.voucher_data['from_name'],
@@ -32,7 +32,7 @@ def test_add_voucher_status(logger, db_session, base_url, get_api_token, test_da
 @allure.epic('API тесты')
 @allure.story('Добавление ваучера')
 @allure.title('Валидация ответа')
-def test_add_voucher_validate(logger, db_session, base_url, get_api_token, test_data, delete_session):
+def test_add_voucher_validate(logger, base_url, get_api_token, test_data, delete_session):
     target_url = f"{base_url}?route=api/sale/voucher.add&api_token={get_api_token}"
 
     payload = {'from_name': test_data.voucher_data['from_name'],
@@ -59,7 +59,7 @@ def test_add_voucher_validate(logger, db_session, base_url, get_api_token, test_
 @allure.epic('API тесты')
 @allure.story('Добавление ваучера')
 @allure.title('Проверка сохраненных данных')
-def test_add_voucher_data(logger, db_session, base_url, get_api_token, test_data, delete_session):
+def test_add_voucher_data(logger, models, db_session, base_url, get_api_token, test_data, delete_session):
     target_url = f"{base_url}?route=api/sale/voucher.add&api_token={get_api_token}"
 
     payload = {'from_name': test_data.voucher_data['from_name'],
@@ -76,8 +76,10 @@ def test_add_voucher_data(logger, db_session, base_url, get_api_token, test_data
     requests.request("POST", target_url, headers=headers, data=payload, verify=False)
 
     logger.info(f"Getting session {get_api_token} data from DB")
-    session_data_raw = db_session.execute(text("SELECT data FROM oc_session WHERE session_id = :session_id"),
-                                          {"session_id": get_api_token}).scalar()
+    # session_data_raw = db_models_and_session.execute(text("SELECT data FROM oc_session WHERE session_id = :session_id"),
+    #                                                  {"session_id": get_api_token}).scalar()
+    session = models["oc_session"]
+    session_data_raw = db_session.query(session.data).filter(session.session_id == get_api_token).scalar()
     session_data = json.loads(session_data_raw)
 
     assert ((session_data['vouchers'][0]['to_name'] == test_data.voucher_data['to_name']) and

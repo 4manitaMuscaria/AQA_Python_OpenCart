@@ -11,7 +11,7 @@ from OpenCart_autotests.models.add_customer_response_model import AddCustomerRes
 @allure.epic('API тесты')
 @allure.story('Добавление покупателя')
 @allure.title('Проверка статуса')
-def test_add_customer_status(logger, db_session, base_url, get_api_token, test_data, delete_session):
+def test_add_customer_status(logger, base_url, get_api_token, test_data, delete_session):
     target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
 
     payload = {'customer_group_id': test_data.user_data['customer_group_id'],
@@ -29,7 +29,7 @@ def test_add_customer_status(logger, db_session, base_url, get_api_token, test_d
 @allure.epic('API тесты')
 @allure.story('Добавление покупателя')
 @allure.title('Валидация ответа')
-def test_add_customer_validate(logger, db_session, base_url, delete_session, get_api_token, test_data):
+def test_add_customer_validate(logger, base_url, delete_session, get_api_token, test_data):
     target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
 
     payload = {'customer_group_id': test_data.user_data['customer_group_id'],
@@ -53,7 +53,7 @@ def test_add_customer_validate(logger, db_session, base_url, delete_session, get
 @allure.epic('API тесты')
 @allure.story('Добавление покупателя')
 @allure.title('Проверка сохраненных данных')
-def test_add_customer_data(logger, db_session, base_url, get_api_token, test_data, delete_session):
+def test_add_customer_data(logger, models, db_session, base_url, get_api_token, test_data, delete_session):
     target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
 
     payload = {'customer_group_id': test_data.user_data['customer_group_id'],
@@ -68,9 +68,11 @@ def test_add_customer_data(logger, db_session, base_url, get_api_token, test_dat
     logger.info(f"response from server: \n {response.json()}")
 
     logger.info(f"Getting session {get_api_token} data from DB")
-    session_data_raw = db_session.execute(text("SELECT data FROM oc_session WHERE session_id = :session_id"),
-                                          {"session_id": get_api_token}).scalar()
+    # session_data_raw = db_models_and_session.execute(text("SELECT data FROM oc_session WHERE session_id = :session_id"),
+    #                                                  {"session_id": get_api_token}).scalar()
     # logger.info(f"From session {get_api_token} have got data {session_data_raw}")
+    session = models["oc_session"]
+    session_data_raw = db_session.query(session.data).filter(session.session_id == get_api_token).scalar()
     session_data = json.loads(session_data_raw)
 
     assert ((session_data['customer']['customer_group_id'] == test_data.user_data['customer_group_id']) and

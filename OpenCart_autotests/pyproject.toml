@@ -1,5 +1,5 @@
 [project]
-name = "diplom"
+name = "OpenCart_autotests"
 version = "0.1.0"
 description = ""
 authors = [
@@ -21,7 +21,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "diplom", from = "src"}]
+packages = [{include = "OpenCart_autotests", from = "src"}]
 
 
 [tool.poetry.group.dev.dependencies]
