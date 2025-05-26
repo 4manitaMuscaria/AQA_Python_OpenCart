@@ -2,3 +2,4 @@
 **/logs/
 **/allure-result/
 **/allure-report/
+.idea/
