@@ -42,12 +42,12 @@ def build_docker_image(ip):
 
 
 # Функция для очистки Docker
-def cleanup_docker(project_name="opencart"):
+def cleanup_docker(project_name="opencart_autotests"):
     try:
         # Удаляем контейнеры, связанные с проектом
         print("Удаляем контейнеры...")
         containers = subprocess.run(
-            ["docker", "ps", "-q", "--filter", f"name={project_name}"],
+            ["docker", "ps", "-qa", "--filter", f"name={project_name}"],
             stdout=subprocess.PIPE,
             text=True
         ).stdout.strip().split()

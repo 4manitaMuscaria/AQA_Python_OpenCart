@@ -4,8 +4,7 @@ import requests
 import allure
 
 from pydantic import ValidationError
-from sqlalchemy import text
-from OpenCart_autotests.models.add_customer_response_model import AddCustomerResponse
+from OpenCart_autotests.models import AddCustomerResponse, AddCustomerRequest
 
 
 @allure.epic('API тесты')
@@ -14,15 +13,15 @@ from OpenCart_autotests.models.add_customer_response_model import AddCustomerRes
 def test_add_customer_status(logger, base_url, get_api_token, test_data, delete_session):
     target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
 
-    payload = {'customer_group_id': test_data.user_data['customer_group_id'],
-               'firstname': test_data.user_data['firstname'],
-               'lastname': test_data.user_data['lastname'],
-               'email': test_data.user_data['email']}
+    try:
+        payload = AddCustomerRequest(**test_data.user_data)
+    except ValidationError as e:
+        logger.error(f"Data validation failed: {e}")
 
     headers = {}
 
     logger.info("Sending request")
-    response = requests.request("POST", target_url, headers=headers, data=payload, verify=False)
+    response = requests.request("POST", target_url, headers=headers, data=payload.model_dump(), verify=False)
     assert response.status_code == 200
 
 
@@ -32,15 +31,15 @@ def test_add_customer_status(logger, base_url, get_api_token, test_data, delete_
 def test_add_customer_validate(logger, base_url, delete_session, get_api_token, test_data):
     target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
 
-    payload = {'customer_group_id': test_data.user_data['customer_group_id'],
-               'firstname': test_data.user_data['firstname'],
-               'lastname': test_data.user_data['lastname'],
-               'email': test_data.user_data['email']}
+    try:
+        payload = AddCustomerRequest(**test_data.user_data)
+    except ValidationError as e:
+        logger.error(f"Data validation failed: {e}")
 
     headers = {}
 
     logger.info("Sending request")
-    response = requests.request("POST", target_url, headers=headers, data=payload, verify=False).json()
+    response = requests.request("POST", target_url, headers=headers, data=payload.model_dump(), verify=False).json()
 
     logger.info("Validating response")
     try:
@@ -56,15 +55,15 @@ def test_add_customer_validate(logger, base_url, delete_session, get_api_token, 
 def test_add_customer_data(logger, models, db_session, base_url, get_api_token, test_data, delete_session):
     target_url = f"{base_url}?route=api/sale/customer&api_token={get_api_token}"
 
-    payload = {'customer_group_id': test_data.user_data['customer_group_id'],
-               'firstname': test_data.user_data['firstname'],
-               'lastname': test_data.user_data['lastname'],
-               'email': test_data.user_data['email']}
+    try:
+        payload = AddCustomerRequest(**test_data.user_data)
+    except ValidationError as e:
+        logger.error(f"Data validation failed: {e}")
 
     headers = {}
 
     logger.info(f"Sending request {get_api_token}")
-    response = requests.request("POST", target_url, headers=headers, data=payload, verify=False)
+    response = requests.request("POST", target_url, headers=headers, data=payload.model_dump(), verify=False)
     logger.info(f"response from server: \n {response.json()}")
 
     logger.info(f"Getting session {get_api_token} data from DB")

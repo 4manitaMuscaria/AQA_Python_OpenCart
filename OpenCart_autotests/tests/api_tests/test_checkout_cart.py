@@ -5,7 +5,7 @@ import allure
 
 from pydantic import ValidationError
 from sqlalchemy import text
-from OpenCart_autotests.models.cart_response_model import CartResponse
+from OpenCart_autotests.models.cart_model import CartResponse
 
 
 @allure.epic('API тесты')
