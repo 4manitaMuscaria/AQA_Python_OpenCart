@@ -3,3 +3,4 @@
 **/allure-result/
 **/allure-report/
 .idea/
+**/check_commits.py
