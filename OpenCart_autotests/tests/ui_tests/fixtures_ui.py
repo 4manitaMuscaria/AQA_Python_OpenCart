@@ -2,7 +2,7 @@ import pytest
 
 from sqlalchemy import text
 from OpenCart_autotests.pages.login_admin_page import LoginAdmin
-from OpenCart_autotests.config.credentials import Credetntials
+from OpenCart_autotests.config.credentials import Credentials
 from OpenCart_autotests.pages.admin_account_page import AdminAccount
 from OpenCart_autotests.pages.main_page import MainPage
 from OpenCart_autotests.pages.account_register_paige import AccountRegister
@@ -12,8 +12,8 @@ from OpenCart_autotests.src.test_data import _TestData
 @pytest.fixture()
 def authenticate(browser):
     LoginAdmin(browser) \
-        .login_input(Credetntials.ADMIN_LOGIN["username"]) \
-        .password_input(Credetntials.ADMIN_LOGIN["password"]) \
+        .login_input(Credentials.ADMIN_LOGIN["username"]) \
+        .password_input(Credentials.ADMIN_LOGIN["password"]) \
         .click_login_button()
     AdminAccount(browser).wait_logged_in()
 

@@ -1,12 +1,12 @@
 import pytest
 from sqlalchemy import text
-from OpenCart_autotests.config.credentials import Credetntials
+from OpenCart_autotests.config.credentials import Credentials
 
 
 def pytest_addoption(parser):
     parser.addoption(
         "--api_url",
-        default=f"https://{Credetntials.HOST}/index.php",
+        default=f"https://{Credentials.HOST}/index.php",
         help="This is request url"
     )
 
@@ -35,7 +35,7 @@ def api_setup(logger, models, db_session):
     Api = models["oc_api"]
     # api_key = db_models_and_session.execute(text("SELECT `key` FROM oc_api WHERE username = :username"),
     #                                         {"username": Credetntials.API_CREDS["username"]}).scalar()
-    api_key = db_session.query(Api.key).filter(Api.username == Credetntials.API_CREDS["username"]).scalar()
+    api_key = db_session.query(Api.key).filter(Api.username == Credentials.API_CREDS["username"]).scalar()
 
     return api_key
 

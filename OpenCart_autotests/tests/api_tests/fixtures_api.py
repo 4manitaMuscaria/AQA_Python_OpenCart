@@ -1,8 +1,7 @@
 import pytest
 import requests
 
-from sqlalchemy import text
-from OpenCart_autotests.config.credentials import Credetntials
+from OpenCart_autotests.config.credentials import Credentials
 
 
 @pytest.fixture()
@@ -11,7 +10,7 @@ def get_api_token(logger, base_url, api_setup):
 
     target_url = f"{base_url}?route=api/account/login"
     # logger.info(f"из фикстуры получен ключ {api_setup}")
-    payload = f'username={Credetntials.API_CREDS["username"]}&key={api_setup}'
+    payload = f'username={Credentials.API_CREDS["username"]}&key={api_setup}'
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }

@@ -7,7 +7,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy import MetaData
 from sqlalchemy.orm import relationship
 from OpenCart_autotests.utils.logger import LoggerManager
-from OpenCart_autotests.config.credentials import Credetntials
+from OpenCart_autotests.config.credentials import Credentials
 
 pytest_plugins = [
     "OpenCart_autotests.tests.ui_tests.conftest_ui",
@@ -70,9 +70,9 @@ def db_models_and_session(logger):
     Фикстура для работы с базой данных
     """
     logger.info("DB connection")
-    engine = create_engine(f"mysql+pymysql://{Credetntials.DB_CREDS['user']}:{Credetntials.DB_CREDS['password']}@"
-                           f"{Credetntials.HOST}:{Credetntials.DB_CREDS['port']}/"
-                           f"{Credetntials.DB_CREDS['db_name']}",
+    engine = create_engine(f"mysql+pymysql://{Credentials.DB_CREDS['user']}:{Credentials.DB_CREDS['password']}@"
+                           f"{Credentials.HOST}:{Credentials.DB_CREDS['port']}/"
+                           f"{Credentials.DB_CREDS['db_name']}",
                            isolation_level="READ COMMITTED")
     logger.info("Connecting DB and opening session")
     connection = engine.connect()

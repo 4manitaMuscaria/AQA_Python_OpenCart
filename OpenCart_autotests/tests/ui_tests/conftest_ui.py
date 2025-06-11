@@ -4,14 +4,14 @@ import allure
 import json
 from selenium import webdriver
 from selenium.webdriver import FirefoxOptions, ChromeOptions, EdgeOptions
-from OpenCart_autotests.config.credentials import Credetntials
+from OpenCart_autotests.config.credentials import Credentials
 
 
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome")
     parser.addoption("--maximize", action="store_true")
     parser.addoption("--headless", action="store_true")
-    parser.addoption("--url", action="store", default=f"http://{Credetntials.HOST}/", help="This is request url")
+    parser.addoption("--url", action="store", default=f"http://{Credentials.HOST}/", help="This is request url")
     parser.addoption("--execution", action="store", default="remote")
     parser.addoption("--executor", default="127.0.0.1")
     parser.addoption("--bv")
