@@ -1,6 +1,7 @@
 from OpenCart_autotests.utils.docker_setup import get_local_ip
 
-class Credentials():
+
+class Credentials:
     HOST = get_local_ip()
     ADMIN_LOGIN = {
         "username": "user",
